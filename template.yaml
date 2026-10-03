@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  Partner File Exchange - Lambda deployment using AWS SAM
+
+Resources:
+
+  PartnerFileExchangeProcessorSAM:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: PartnerFileExchangeProcessorSAM
+      Runtime: python3.14
+      Handler: app.lambda_handler
+      CodeUri: lambda/
+      Timeout: 30
+      MemorySize: 128
+
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+                - s3:DeleteObject
+              Resource: arn:aws:s3:::partner-file-exchange-aws/*
+
+            - Effect: Allow
+              Action:
+                - s3:ListBucket
+              Resource: arn:aws:s3:::partner-file-exchange-aws
